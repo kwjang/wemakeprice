@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>위메프 과제</title>
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#submit').on('click', function() {
+                    let params = {
+                        url: $('input[name="url"]').val(),
+                        type: $('select[name="type"]').val(),
+                        bundle: $('input[name="bundle"]').val(),
+                    }
+
+                    $.ajax({
+                        url : "/crawling",
+                        type : "post",
+                        contentType: "application/json",
+                        data : JSON.stringify(params),
+                        success : function(response) {
+                            console.log(response);
+
+                            for(let key in response) {
+                                $('#' + key).text(response[key]);
+                            }
+                        },
+                        error : function(error){
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="page-header">
+                <h1>Wemakeprice Project</h1>
+            </div>
+            <br>
+
+            <h3>입력</h3>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Url</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="url" placeholder="url을 입력해주세요">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="type">
+                            <option value="without html">html 태그 제외</option>
+                            <option value="all text">text 전체</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">출력 단위 묶음</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" name="bundle" min="1" placeholder="출력 단위 묶음을 입력해주세요.">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-11 col-sm-1">
+                        <button type="button" class="btn btn-default" id="submit">출력</button>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <hr>
+            <br>
+            <h3>출력</h3>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">몫</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" style="word-break:break-all" id="quotient">-</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">나머지</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" style="word-break:break-all" id="remainder">-</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
